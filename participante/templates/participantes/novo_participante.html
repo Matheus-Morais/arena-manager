@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+<div class="row">
+    {% block body %}
+    <h1>Participante</h1>
+    <br/>
+        <form class="" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.nome.id_for_label }}">Nome:</label>
+                {{ form.nome|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.jogo.id_for_label }}">Jogo:</label>
+                {{ form.jogo|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.vitoria.id_for_label }}">Vitórias:</label>
+                {{ form.vitoria|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.derrota.id_for_label }}">Derrotas:</label>
+                {{ form.derrota|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.empate.id_for_label }}">Empates:</label>
+                {{ form.empate|add_class:"form-control" }}
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class = "btn btn-primary" >Salvar</button>
+            </div>
+        </form>
+
+    {% endblock body %}
+</div>

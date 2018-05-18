@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block body %}
+        <h1>Lista de Participantes</h1>
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{m}}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if participantes %}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Vitórias</th>
+                        <th>Derrotas</th>
+                        <th>Empates</th>
+                        <th colspan="2">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participantes %}
+                        <tr>
+                            <td>{{p.id}}</td>
+                            <td>{{p.nome}}</td>
+                            <td>{{p.vitoria}}</td>
+                            <td>{{p.derrota}}</td>
+                            <td>{{p.empate}}</td>
+                            <td><a href="{% url 'participantes:editar-participante' p.id %}" class="btn btn-success">Editar</a></td>
+                            <td><a href="{% url 'participantes:excluir-participante' p.id %}" class="btn btn-danger">Excluir</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info">
+                <p>Não há Participantes cadastrados nesse jogo!</p>
+            </div>
+        {% endif %}
+        <a href="{% url 'participantes:novo-participante' %}" class="btn btn-primary" role="button">Novo Participante</a>
+
+{% endblock body %}

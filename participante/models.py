@@ -16,7 +16,7 @@ class Participante(models.Model):
     empate = models.IntegerField(verbose_name='Empates', default=0)
 
     def __str__(self):
-        return self.nome
+        return self.nome + ' - ' + self.jogo
 
 class Partida(models.Model):
     DIA_CHOICES = (

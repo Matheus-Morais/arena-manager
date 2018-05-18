@@ -20,6 +20,6 @@ from accounts import urls as accounts_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name = 'core'),
+    path('', views.home, name = 'home'),
     path('accounts/', include(accounts_urls)),
 ]

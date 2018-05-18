@@ -4,8 +4,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import UserForm
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required
 def add_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -14,7 +16,7 @@ def add_user(request):
             u.set_password(u.password)
             u.save()
             messages.success(request, 'Usuário criado com sucesso! Utilize o formulario abaixo para fazer login!')
-            return redirect('accounts:user-login')
+            return redirect('home')
         else:
             messages.error(request, form.errors)
     else:
@@ -34,7 +36,8 @@ def user_login(request):
         else:
             messages.error(request, 'Usuario ou senha invalidos!')
     return render(request, 'accounts/user_login.html')
-
+    
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)

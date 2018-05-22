@@ -16,7 +16,7 @@ class Participante(models.Model):
     empate = models.IntegerField(verbose_name='Empates', default=0)
 
     def __str__(self):
-        return self.nome + ' - ' + self.jogo
+        return self.nome
 
 class Partida(models.Model):
     DIA_CHOICES = (
@@ -32,10 +32,18 @@ class Partida(models.Model):
         ('CSGO', 'CS:GO'),
     )
 
+    VENCEDOR_CHOICES = (
+        ('C', 'Participante Casa'),
+        ('D', 'Participante Desafiante'),
+        ('E', 'Empate'),
+    )
+
     jogo = models.CharField(verbose_name='Jogo', max_length=4, choices=JOGO_CHOICES)
     dia = models.CharField(verbose_name='Dia', max_length=2, choices=DIA_CHOICES)
+    vencedor = models.CharField(verbose_name='Vencedor', max_length=1, choices=VENCEDOR_CHOICES, blank = True)
     participante_casa = models.ForeignKey(Participante, related_name='participante_casa', on_delete=models.PROTECT)
     participante_desafiante = models.ForeignKey(Participante, related_name='participante_desafiante', on_delete=models.PROTECT)
+    
 
     def __str__(self):
         return self.participante_casa.nome + ' VS ' + self.participante_desafiante.nome

@@ -14,7 +14,7 @@ def lista_participantes_partidas_lol(request):
     partidas_quarta = Partida.objects.filter(jogo = 'LOL', dia = 'Q')
     partidas_quinta = Partida.objects.filter(jogo = 'LOL', dia = 'QI')
     partidas_sexta = Partida.objects.filter(jogo = 'LOL', dia = 'S')
-    return render(request, 'participantes/lista_participantes_partidas.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
+    return render(request, 'participantes/lista_participantes_partidas_lol.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
 
 @login_required
 def lista_participantes_partidas_fifa(request):
@@ -23,7 +23,7 @@ def lista_participantes_partidas_fifa(request):
     partidas_quarta = Partida.objects.filter(jogo = 'FIFA', dia = 'Q')
     partidas_quinta = Partida.objects.filter(jogo = 'FIFA', dia = 'QI')
     partidas_sexta = Partida.objects.filter(jogo = 'FIFA', dia = 'S')
-    return render(request, 'participantes/lista_participantes_partidas.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
+    return render(request, 'participantes/lista_participantes_partidas_fifa.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
 
 @login_required
 def lista_participantes_partidas_cs(request):
@@ -32,7 +32,7 @@ def lista_participantes_partidas_cs(request):
     partidas_quarta = Partida.objects.filter(jogo = 'CSGO', dia = 'Q')
     partidas_quinta = Partida.objects.filter(jogo = 'CSGO', dia = 'QI')
     partidas_sexta = Partida.objects.filter(jogo = 'CSGO', dia = 'S')
-    return render(request, 'participantes/lista_participantes_partidas.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
+    return render(request, 'participantes/lista_participantes_partidas_csgo.html', {'participantes': participantes, 'partidas_terca': partidas_terca, 'partidas_quarta':partidas_quarta, 'partidas_quinta':partidas_quinta, 'partidas_sexta':partidas_sexta})
 
 @login_required
 def novo_participante(request):
@@ -78,31 +78,128 @@ def excluir_participante(request, id):
         return redirect('participantes:lista-participantes-partidas-CSGO')
 
 @login_required
-def nova_partida(request):
+def nova_partida_lol(request):
     if request.method == 'POST':
-        form = PartidaForms(request.POST)
+        form = PartidaLOLForms(request.POST)
         if form.is_valid():
             f = form.save(commit=False)
             f.save()
-            return redirect('participantes:nova-partida')
+            return redirect('participantes:nova-partida-lol')
         else:
             print(form.errors)
     else:
-        form = PartidaForms()
+        form = PartidaLOLForms()
+    return render(request, 'partidas/nova_partida.html', {'form': form})
+
+@login_required
+def nova_partida_fifa(request):
+    if request.method == 'POST':
+        form = PartidaFIFAForms(request.POST)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.save()
+            return redirect('participantes:nova-partida-fifa')
+        else:
+            print(form.errors)
+    else:
+        form = PartidaFIFAForms()
+    return render(request, 'partidas/nova_partida.html', {'form': form})
+
+@login_required
+def nova_partida_csgo(request):
+    if request.method == 'POST':
+        form = PartidaCSGOForms(request.POST)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.save()
+            return redirect('participantes:nova-partida-csgo')
+        else:
+            print(form.errors)
+    else:
+        form = PartidaCSGOForms()
     return render(request, 'partidas/nova_partida.html', {'form': form})
 
 @login_required
 def editar_partida(request, id):
     partida = get_object_or_404(Partida, id=id)
     if request.method == 'POST':
-        form = PartidaForms(request.POST, instance=partida)
+        if partida.jogo == 'LOL':
+            form = PartidaLOLForms(request.POST, instance=partida)
+        elif partida.jogo == 'FIFA':
+            form = PartidaFIFAForms(request.POST, instance=partida)
+        elif partida.jogo == 'CSGO':
+            form = PartidaCSGOForms(request.POST, instance=partida)
+        
         if form.is_valid():
             form.save()
             if partida.jogo == 'LOL':
+                casa = Participante.objects.get(pk = partida.participante_casa.id)
+                desafiante = Participante.objects.get(pk = partida.participante_desafiante.id)
+
+                if (partida.vencedor == 'C'):
+                    casa.vitoria = casa.vitoria + 1
+                    casa.save()
+                    desafiante.derrota = casa.derrota + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'D'):
+                    casa.derrota = casa.derrota + 1
+                    casa.save()
+                    desafiante.vitoria = casa.vitoria + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'E'):
+                    casa.empate = casa.empate + 1
+                    casa.save()
+                    desafiante.empate = desafiante.empate + 1
+                    desafiante.save()
+
                 return redirect('participantes:lista-participantes-partidas-LOL')
             elif partida.jogo == 'FIFA':
+                casa = Participante.objects.get(pk = partida.participante_casa.id)
+                desafiante = Participante.objects.get(pk = partida.participante_desafiante.id)
+
+                if (partida.vencedor == 'C'):
+                    casa.vitoria = casa.vitoria + 1
+                    casa.save()
+                    desafiante.derrota = casa.derrota + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'D'):
+                    casa.derrota = casa.derrota + 1
+                    casa.save()
+                    desafiante.vitoria = casa.vitoria + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'E'):
+                    casa.empate = casa.empate + 1
+                    casa.save()
+                    desafiante.empate = desafiante.empate + 1
+                    desafiante.save()
+
                 return redirect('participantes:lista-participantes-partidas-FIFA')
             elif partida.jogo == 'CSGO':
+                casa = Participante.objects.get(pk = partida.participante_casa.id)
+                desafiante = Participante.objects.get(pk = partida.participante_desafiante.id)
+
+                if (partida.vencedor == 'C'):
+                    casa.vitoria = casa.vitoria + 1
+                    casa.save()
+                    desafiante.derrota = casa.derrota + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'D'):
+                    casa.derrota = casa.derrota + 1
+                    casa.save()
+                    desafiante.vitoria = casa.vitoria + 1
+                    desafiante.save()
+
+                elif (partida.vencedor == 'E'):
+                    casa.empate = casa.empate + 1
+                    casa.save()
+                    desafiante.empate = desafiante.empate + 1
+                    desafiante.save()
+
                 return redirect('participantes:lista-participantes-partidas-CSGO')
     else:
         form = PartidaForms(instance=partida)

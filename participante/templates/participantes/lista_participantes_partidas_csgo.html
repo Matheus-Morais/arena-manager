@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Lista de Participantes do CS:GO</h1>
+    {% if messages %}
+        {% for m in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{m}}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if participantes %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Vitórias</th>
+                    <th>Derrotas</th>
+                    <th>Empates</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participantes %}
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.nome}}</td>
+                        <td>{{p.vitoria}}</td>
+                        <td>{{p.derrota}}</td>
+                        <td>{{p.empate}}</td>
+                        <td><a href="{% url 'participantes:editar-participante' p.id %}" class="btn btn-success">Editar</a></td>
+                        <td><a href="{% url 'participantes:excluir-participante' p.id %}" class="btn btn-danger">Excluir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p>Não há Participantes cadastrados nesse jogo!</p>
+        </div>
+    {% endif %}
+    <a href="{% url 'participantes:novo-participante' %}" class="btn btn-primary" role="button">Novo Participante</a>
+    <br>
+    <h1>Lista de Partidas</h1>
+    {% if messages %}
+        {% for m in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{m}}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if partidas_terca %}
+        <h3>Terça-feira</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Jogador Casa</th>
+                    <th>Jogador Desafiante</th>
+                    <th>Dia</th>
+                    <th>Vencedor</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in partidas_terca %}
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.participante_casa.nome}}</td>
+                        <td>{{p.participante_desafiante.nome}}</td>
+                        <td>{{p.get_dia_display}}</td>
+                        <td>{{p.get_vencedor_display}}</td>
+
+                        <td><a href="{% url 'participantes:editar-partida' p.id %}" class="btn btn-success">Editar</a></td>
+                        <td><a href="{% url 'participantes:excluir-partida' p.id %}" class="btn btn-danger">Excluir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p>Não há Partidas cadastradas na terça-feira, nesse jogo!</p>
+        </div>
+    {% endif %}
+    {% if partidas_quarta %}
+        <h3>Quarta-feira</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Jogador Casa</th>
+                    <th>Jogador Desafiante</th>
+                    <th>Dia</th>
+                    <th>Vencedor</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in partidas_quarta %}
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.participante_casa.nome}}</td>
+                        <td>{{p.participante_desafiante.nome}}</td>
+                        <td>{{p.get_dia_display}}</td>
+                        <td>{{p.get_vencedor_display}}</td>
+
+                        <td><a href="{% url 'participantes:editar-partida' p.id %}" class="btn btn-success">Editar</a></td>
+                        <td><a href="{% url 'participantes:excluir-partida' p.id %}" class="btn btn-danger">Excluir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p>Não há Partidas cadastradas na quarta-feira, nesse jogo!</p>
+        </div>
+    {% endif %}
+
+    {% if partidas_quinta %}
+        <h3>Quinta-feira</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Jogador Casa</th>
+                    <th>Jogador Desafiante</th>
+                    <th>Dia</th>
+                    <th>Vencedor</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in partidas_quinta %}
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.participante_casa.nome}}</td>
+                        <td>{{p.participante_desafiante.nome}}</td>
+                        <td>{{p.get_dia_display}}</td>
+                        <td>{{p.get_vencedor_display}}</td>
+
+                        <td><a href="{% url 'participantes:editar-partida' p.id %}" class="btn btn-success">Editar</a></td>
+                        <td><a href="{% url 'participantes:excluir-partida' p.id %}" class="btn btn-danger">Excluir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p>Não há Partidas cadastradas na quinta-feira, nesse jogo!</p>
+        </div>
+    {% endif %}
+    {% if partidas_sexta %}
+        <h3>Sexta-feira</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Jogador Casa</th>
+                    <th>Jogador Desafiante</th>
+                    <th>Dia</th>
+                    <th>Vencedor</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in partidas_sexta %}
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.participante_casa.nome}}</td>
+                        <td>{{p.participante_desafiante.nome}}</td>
+                        <td>{{p.get_dia_display}}</td>
+                        <td>{{p.get_vencedor_display}}</td>
+
+                        <td><a href="{% url 'participantes:editar-partida' p.id %}" class="btn btn-success">Editar</a></td>
+                        <td><a href="{% url 'participantes:excluir-partida' p.id %}" class="btn btn-danger">Excluir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p>Não há Partidas cadastradas na sexta-feira, nesse jogo!</p>
+        </div>
+    {% endif %}
+    <a href="{% url 'participantes:nova-partida-csgo' %}" class="btn btn-primary" role="button">Nova Partida</a>
+
+{% endblock body %}
